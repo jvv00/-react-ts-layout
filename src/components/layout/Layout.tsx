@@ -1,16 +1,26 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
+import { Outlet } from 'react-router-dom'
+import styled from 'styled-components'
 
 const Layout: React.FC = () => (
-    <div>
-        <Header name="가을이 홈페이지" />
-        <main>
+    <LayoutWrap>
+        <Header name="Layout" />
+        <main id="main">
             <Outlet />
         </main>
         <Footer />
-    </div>
+    </LayoutWrap>
 )
+
+const LayoutWrap = styled.div`
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    #main {
+        flex: 1;
+    }
+`
 
 export default Layout
