@@ -1,70 +1,244 @@
-# Getting Started with Create React App
+# 리액트 타입스크립트를 이용한 레이아웃 구성 & Route 설정
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 1. 프로젝트 생성
 
-## Available Scripts
+```bash
+npx create-react-app react-ts-layout --typescript
+cd react-ts-layout
+npm start
+```
 
-In the project directory, you can run:
+### - 패키지 설치
 
-### `npm start`
+#### 라우터 설치
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+npm i react-dom
+npm i react-router-dom
+npm i @types/react-dom
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+yarn add react-dom
+yarn add react-router-dom
+yarn add @types/react-dom
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### styled-components 설치
 
-### `npm run build`
+```bash
+yarn add styled-components
+npm i styled-components
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### typescript 설치
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+TypeScript는 주로 개발 중에 TypeScript 코드를 유형 확인하고 JavaScript로 컴파일하는 데 사용되는 도구이기 때문에 TypeScript를 개발 종속성(--dev)으로 설치하는 것이 일반적인 관행입니다.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+yarn add typescript --dev
+npm i typescript --dev
+```
 
-### `npm run eject`
+## 2. 컴포넌트(Components) 생성
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### - Header 컴포넌트 생성
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+-   `src/components/layout` 디렉토리에 `Header.tsx` 파일을 생성한다.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```tsx
+// src/components/layout/Header.tsx
+import React from 'react'
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+type HeaderProps = {
+    name: string
+}
 
-## Learn More
+const Header: React.FC<HeaderProps> = ({ name }) => <div>Hello, {name}</div>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+export default Header
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### - Footer 컴포넌트 생성
 
-### Code Splitting
+-   `src/components/layout` 디렉토리에 `Footer.tsx` 파일을 생성한다.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```tsx
+// src/components/layout/Footer.tsx
+import React from 'react'
 
-### Analyzing the Bundle Size
+const Footer: React.FC = () => <div>Footer</div>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+export default Footer
+```
 
-### Making a Progressive Web App
+### - Layout 컴포넌트 생성
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+-   `src/components/layout` 디렉토리에 `Layout.tsx` 파일을 생성한다.
 
-### Advanced Configuration
+```tsx
+// src/components/layout/Layout.tsx
+import React from 'react'
+import Header from './Header'
+import Footer from './Footer'
+import { Outlet } from 'react-router-dom'
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+const Layout: React.FC = () => (
+    <div>
+        <Header name="Layout" />
+        <main id="main">
+            <Outlet />
+        </main>
+        <Footer />
+    </div>
+)
 
-### Deployment
+export default Layout
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### - Home 컴포넌트 생성
 
-### `npm run build` fails to minify
+-   `src/views` 디렉토리에 `Home.tsx` 파일을 생성한다.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```tsx
+// src/views/Home.tsx
+import React from 'react'
+
+const Home: React.FC = () => <div>Home</div>
+
+export default Home
+```
+
+### - About 컴포넌트 생성
+
+-   `src/views` 디렉토리에 `About.tsx` 파일을 생성한다.
+
+```tsx
+// src/views/About.tsx
+import React from 'react'
+
+const About: React.FC = () => <div>About</div>
+
+export default About
+```
+
+## 3. 라우트 설정
+
+### - Router.tsx 파일 수정
+
+-   `src` 디렉토리에 `Router.tsx` 파일을 생성한다.
+
+```tsx
+// src/Router.tsx
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Layout from './components/layout/Layout'
+import Home from './views/Home'
+import About from './views/About'
+
+const Router: React.FC = () => (
+    <BrowserRouter>
+        <Routes>
+            <Route path="/" element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route path="about" element={<About />} />
+            </Route>
+        </Routes>
+    </BrowserRouter>
+)
+
+export default Router
+```
+
+### - App.tsx 파일 수정
+
+-   `src` 디렉토리에 `App.tsx` 파일을 수정한다.
+
+```tsx
+// src/App.tsx
+import React from 'react'
+import Routers from './Routers'
+
+const App: React.FC = () => <Routers />
+
+export default App
+```
+
+### - index.tsx 파일 수정
+
+-   `src` 디렉토리에 `index.tsx` 파일을 수정한다.
+
+```tsx
+// src/index.tsx
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import reportWebVitals from './reportWebVitals'
+
+ReactDOM.createRoot(document.getElementById('root')!).render(<App />)
+
+reportWebVitals()
+```
+
+## Chakra UI 설치
+
+```bash
+yarn add @chakra-ui/react @emotion/react @emotion/styled framer-motion
+```
+
+### - Chakra UI Provider 설정
+
+-   `src` 디렉토리에 `ChakraProvider.tsx` 파일을 생성한다.
+
+```tsx
+// src/theme/theme.ts
+import { extendTheme } from '@chakra-ui/react'
+import { globalStyles } from './styles'
+
+export default extendTheme(globalStyles)
+```
+
+-   `src` 디렉토리에 `styles.ts` 파일을 생성한다.
+
+```tsx
+import { mode } from '@chakra-ui/theme-tools'
+
+export const globalStyles = {
+    color: {
+        primary: {
+            100: '#f7fafc',
+            900: '#1a202c',
+        },
+    },
+    styles: {
+        global: (props: any) => ({
+            body: {
+                bg: mode('gray.50', 'gray.800')(props),
+                color: mode('gray.800', 'gray.50')(props),
+            },
+        }),
+    },
+}
+```
+
+### - App.tsx 파일 수정
+
+-   `src` 디렉토리에 `App.tsx` 파일을 수정한다.
+
+```tsx
+// src/App.tsx
+import React from 'react'
+import Routers from './Routers'
+import { ChakraProvider } from '@chakra-ui/react'
+import { ThemeProvider } from 'styled-components'
+import theme from './theme/theme'
+
+const App: React.FC = () => (
+    <ChakraProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+            <Routers />
+        </ThemeProvider>
+    </ChakraProvider>
+)
+
+export default App
+```
